@@ -1,21 +1,21 @@
 import { Button, Grid, TextField } from "@mui/material";
 import { useState } from "react";
-import { generateTaxReport } from "./helpers/calculateTax";
-import { MonthlyRecord } from "./models/monthlyRecord";
-interface Props {
-  setResults: (results: MonthlyRecord[]) => void;
-}
+import { populateSalary, useAppDispatch, useAppSelector } from "../../store";
+import { Link } from "react-router-dom";
 
-const SalaryInputForm = ({setResults}: Props) => {
+const InitialInputForm = () => {
+  const salaries = useAppSelector((state) => state.salaries);
+  const dispatch = useAppDispatch();
+
   const [isInputValid, setIsInputValid] = useState(false);
-  const [enteredSalary, setEnteredSalary] = useState<number | null>(null);
+  // const [enteredSalary, setEnteredSalary] = useState<number | null>(null);
   const [inputTouched, setInputTouched] = useState(false);
 
   const handleSalaryInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const salary = Number(e.target.value) || null;
     // console.log('inside handler');
     if(salary){
-      setEnteredSalary(salary);
+      dispatch(populateSalary(salary));
       setIsInputValid(true);
     }
     else {
@@ -25,19 +25,22 @@ const SalaryInputForm = ({setResults}: Props) => {
 
   const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(!enteredSalary) return;
-    const results = generateTaxReport(enteredSalary);
-    setResults(results);
+    // if(!enteredSalary) return;
+    // dispatch(populateSalary(enteredSalary));
+    // const results = generateTaxReport(enteredSalary);
+    // setResults(results);
+    console.log('salaries');
+    console.log(salaries);
   }
 
   return(
     
-      <Grid item display='flex' justifyContent='center' width='100%' xs={12} >
+      <Grid item display='flex' justifyContent='center' xs={12} >
         {/* <Paper sx={{ width: '80%', mt: '2rem'}} > */}
           <form 
             onSubmit={handleSubmit}
             style={{
-              width: '100%',
+              width: '80%',
               marginTop: '1rem'
             }}
           >
@@ -54,17 +57,17 @@ const SalaryInputForm = ({setResults}: Props) => {
               variant="outlined"
             />
             <Button
+              component={Link} to={'/salaries-by-month'}
               disabled={!isInputValid}
               variant="contained"
               type='submit'
               sx={{ mt: 1 }}
               fullWidth
-            >Calculate</Button>
+            >Next</Button>
           </form>
         {/* </Paper> */}
       </Grid>
-   
   );
 }
 
-export default SalaryInputForm;
+export default InitialInputForm;

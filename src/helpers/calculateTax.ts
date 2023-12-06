@@ -55,7 +55,8 @@ export const generateTaxReport: (salary: number) => MonthlyRecord[] = (salary) =
     const deductibleAmount = getTaxDeduction(taxableAmountThisMonth);
     console.log(deductibleAmount);
 
-    const cumulativeTaxToDate = (taxableAmountThisMonth) * taxRate - deductibleAmount;
+    const taxBeforeDeduction = (taxableAmountThisMonth) * taxRate;
+    const cumulativeTaxToDate = taxBeforeDeduction - deductibleAmount;
 
     const taxDueThisMonth = cumulativeTaxToDate - previouslyPaidTax;
     const month = getMonth(i);
@@ -70,7 +71,11 @@ export const generateTaxReport: (salary: number) => MonthlyRecord[] = (salary) =
       previouslyPaidTax,
       cumulativeTaxToDate, 
       taxDueThisMonth,
-      netSalaryThisMonth
+      netSalaryThisMonth,
+      taxDeduction: deductibleAmount,
+      taxBeforeDeduction,
+      taxRate,
+      taxableAmountThisMonth
     }
     report.push(monthlyReport);
     // console.log('pushed');
@@ -79,4 +84,16 @@ export const generateTaxReport: (salary: number) => MonthlyRecord[] = (salary) =
 
 
   return report;
+}
+
+export const calculateTotalNetSalary: (report: MonthlyRecord[]) => number = (report) =>{
+  return report.reduce((total, month) => {
+    return total + month.netSalaryThisMonth;
+  }, 0);
+}
+
+export const calculateTotalTaxPaid: (report: MonthlyRecord[]) => number = (report) =>{
+  return report.reduce((total, month) => {
+    return total + month.taxDueThisMonth;
+  }, 0);
 }

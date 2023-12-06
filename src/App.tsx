@@ -5,6 +5,9 @@ import SalaryInputForm from "./SalaryForm";
 import { MonthlyRecord } from "./models/monthlyRecord";
 import ResultsTable from "./ResultsTable";
 import Results from "./Results";
+import ExtendedSalaryInputForm from "./components/extended-calculator/salary-input-form/ExtendedSalaryInputForm";
+import InitialInputForm from "./components/prepopulated-form/InitialInputForm";
+import { Outlet } from "react-router-dom";
 
 
 const App = () => {
@@ -30,20 +33,15 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Header darkMode={darkMode} toggleTheme={toggleTheme} />
-        <Container sx={{ m: 1 }}>
-          <Grid
-            container
-            display='flex'
-            justifyContent='space-between'
-            xs={12} 
-            lg={10}
-            spacing={1}
-            textAlign='center'
-          >
-            <SalaryInputForm setResults={setResults} />
-            <Results results={results} />
-          </Grid>
+        <Container>
+          <Outlet />
         </Container>
+        {/* <InitialInputForm /> */}
+        {/* <ExtendedSalaryInputForm setResults={setResults} /> */}
+        {/* <SalaryInputForm setResults={setResults}/>
+        <Results results={results} />  */}
+          
+        
       </ThemeProvider>
     </>
   )

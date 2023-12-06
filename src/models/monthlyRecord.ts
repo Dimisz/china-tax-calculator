@@ -8,4 +8,8 @@ export interface MonthlyRecord {
   cumulativeTaxToDate: number;
   taxDueThisMonth: number;
   netSalaryThisMonth: number;
+  taxRate: number;
+  taxDeduction: number;
+  taxBeforeDeduction: number;
+  taxableAmountThisMonth: number;
 }
